@@ -1,0 +1,9 @@
+{
+  "name": "AS Fitness Tracker",
+  "short_name": "AS Fitness",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#080a09",
+  "theme_color": "#b7ff00",
+  "icons": []
+}
