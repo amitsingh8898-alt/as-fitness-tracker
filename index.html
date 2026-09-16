@@ -314,11 +314,13 @@ ${db.clients.map(x=>`<option value="${x.id}" ${x.id===selectedClient?"selected":
 
 <label>Date</label>
 <input id="workDate" type="date" value="${new Date().toISOString().slice(0,10)}">
-
 <label>Exercise</label>
 <select id="workExercise">
-${db.exercises.map(x=>`<option>${x}</option>`).join("")}
+${exerciseCatalog.map(x=>`<option value="${x[0]}">${x[0]} — ${x[1]} (${x[2]})</option>`).join("")}
 </select>
+
+<button class="dark" onclick="addCustomExercise()">＋ Add Custom Exercise</button>
+
 </div>
 
 <div class="card">
@@ -524,7 +526,18 @@ alert("Client added successfully.");
 showPage("clients");
 }
 
-showPage("home");
+function addCustomExercise(){
+  const name = prompt("Enter your exercise name:");
+  if(!name) return;
+
+  const category = prompt("Enter muscle group (Chest, Back, Legs, etc.):") || "Other";
+  const equipment = prompt("Enter equipment (Dumbbell, Barbell, Cable, Machine, Bodyweight, etc.):") || "Other";
+
+  exerciseCatalog.push([name, category, equipment]);
+
+  alert(name + " added successfully.");
+  showPage("workout");
+  }showPage("home");
 </script>
 </body>
 </html>
