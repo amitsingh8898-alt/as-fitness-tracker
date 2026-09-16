@@ -314,13 +314,77 @@ ${[55,60,65,67.5,70,72.5].map(v=>`<div style="flex:1;background:#b7ff00;height:$
 }
 
 function addClient(){
-const name=prompt("Enter client name");
-if(!name)return;
+app.innerHTML=`
+<h1>Add Client</h1>
+
+<div class="card">
+
+<label>Client Name</label>
+<input id="newName" placeholder="Enter client name">
+
+<label>Age</label>
+<input id="newAge" type="number" placeholder="Age">
+
+<label>Height (cm)</label>
+<input id="newHeight" type="number" placeholder="Height in cm">
+
+<label>Weight (kg)</label>
+<input id="newWeight" type="number" step="0.1" placeholder="Weight in kg">
+
+<label>Goal</label>
+<select id="newGoal">
+<option>Lean Muscle Gain</option>
+<option>Fat Loss</option>
+<option>Muscle Building</option>
+<option>Strength</option>
+<option>General Fitness</option>
+</select>
+
+<label>Training Days</label>
+<input id="newTraining" placeholder="e.g. 4–5 days/week">
+
+<label>Diet Type</label>
+<select id="newDiet">
+<option>Non-Vegetarian</option>
+<option>Vegetarian</option>
+<option>Vegan</option>
+<option>Other</option>
+</select>
+
+<label>Notes</label>
+<textarea id="newNotes" placeholder="Injuries, limitations, other notes"></textarea>
+
+<button onclick="saveNewClient()">✓ Save Client</button>
+<button class="dark" onclick="showPage('clients')">Cancel</button>
+
+</div>`;
+}
+
+function saveNewClient(){
+
+const name=document.getElementById("newName").value.trim();
+const age=Number(document.getElementById("newAge").value);
+const height=Number(document.getElementById("newHeight").value);
+const weight=Number(document.getElementById("newWeight").value);
+
+if(!name || !age || !height || !weight){
+alert("Please enter Name, Age, Height and Weight.");
+return;
+}
+
 db.clients.push({
-id:Date.now(),name:name,age:0,height:170,weight:0,
-goal:"Not set",training:"Not set",diet:"Not set",notes:""
+id:Date.now(),
+name:name,
+age:age,
+height:height,
+weight:weight,
+goal:document.getElementById("newGoal").value,
+training:document.getElementById("newTraining").value || "Not set",
+diet:document.getElementById("newDiet").value,
+notes:document.getElementById("newNotes").value
 });
-alert("Client added.");
+
+alert("Client added successfully.");
 showPage("clients");
 }
 
