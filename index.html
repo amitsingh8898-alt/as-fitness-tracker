@@ -1,134 +1,330 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>AS Fitness Tracker</title>
 <style>
-:root{--bg:#070909;--card:#101414;--card2:#151a18;--line:#28302c;--lime:#c8ff35;--text:#f5f7f5;--muted:#9ca7a1}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}
-button,input,select,textarea{font:inherit}button{cursor:pointer}
-.app{max-width:1100px;margin:auto;min-height:100vh;padding-bottom:80px}
-.top{position:sticky;top:0;z-index:5;background:#090b0b;border-bottom:1px solid var(--line);padding:14px 16px;display:flex;align-items:center;gap:12px}
-.logo{width:42px;height:42px;border:2px solid var(--lime);border-radius:10px;display:grid;place-items:center;color:var(--lime);font-weight:900}
-.brand{font-weight:900;letter-spacing:1px}.sub,.muted{color:var(--muted)}.sub{font-size:12px}.spacer{flex:1}
-.wrap{padding:18px 16px}.title{font-size:27px;margin:0 0 5px}.small{font-size:12px}.lime{color:var(--lime)}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
-.stat span{font-size:12px;color:var(--muted)}.stat b{display:block;font-size:24px;margin-top:7px}
-.btn{background:var(--card2);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px 13px}
-.btn.primary{background:var(--lime);color:#071006;border-color:var(--lime);font-weight:800}
-.btn.danger{color:#ff7777}.full{width:100%}.actions{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
-.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.between{justify-content:space-between}
-.field{margin-bottom:12px}.field label{display:block;color:var(--muted);font-size:12px;margin-bottom:6px}
-input,select,textarea{width:100%;background:#0b0f0e;color:var(--text);border:1px solid var(--line);border-radius:9px;padding:10px}
-table{width:100%;border-collapse:collapse}th,td{border-bottom:1px solid var(--line);padding:9px 6px;text-align:left;font-size:13px}th{color:var(--muted)}
-.nav{position:fixed;bottom:0;left:0;right:0;background:#090b0b;border-top:1px solid var(--line);z-index:10}
-.navin{max-width:1100px;margin:auto;display:flex}.nav button{flex:1;background:none;border:0;color:var(--muted);padding:10px 3px;font-size:11px}.nav button.active{color:var(--lime)}
-.nav i{display:block;font-style:normal;font-size:19px;margin-bottom:3px}
-.tabs{display:flex;gap:7px;overflow:auto;margin:12px 0}.tab{white-space:nowrap}.tab.active{background:var(--lime);color:#071006;font-weight:800}
-.exercise{margin-top:12px}.exerciseHead{display:flex;gap:8px;align-items:center}.exerciseHead input{flex:1}
-.avatar{width:42px;height:42px;border-radius:50%;background:#1c241f;display:grid;place-items:center;color:var(--lime);font-weight:800}
-.client{display:flex;gap:12px;align-items:center}.badge{border:1px solid var(--line);border-radius:20px;padding:5px 8px;color:var(--lime);font-size:11px}
-.meal{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line)}
-canvas{width:100%;height:220px;background:#0b0f0e;border:1px solid var(--line);border-radius:12px}
-@media(max-width:700px){.grid{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}.wrap{padding:15px 12px}th,td{font-size:12px}}
+*{box-sizing:border-box}
+body{margin:0;background:#050505;color:#fff;font-family:Arial,sans-serif}
+header{padding:20px;border-bottom:1px solid #222;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:24px;font-weight:800}.lime{color:#b7ff00}
+main{padding:20px;padding-bottom:90px}
+h1{font-size:28px;margin:10px 0 6px}
+h2{font-size:22px;margin:22px 0 12px}
+p{color:#aaa}
+.card{background:#111;border:1px solid #292929;border-radius:16px;padding:18px;margin:12px 0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:#151515;border-radius:14px;padding:16px}
+.stat b{font-size:25px;color:#b7ff00;display:block}
+button{border:0;border-radius:10px;padding:13px 16px;background:#b7ff00;color:#000;font-weight:800;margin:5px 3px}
+button.dark{background:#222;color:#fff;border:1px solid #444}
+input,select,textarea{width:100%;padding:13px;background:#0b0b0b;color:#fff;border:1px solid #444;border-radius:9px;margin:5px 0 12px}
+label{font-size:13px;color:#aaa}
+table{width:100%;border-collapse:collapse}
+th,td{padding:9px 5px;border-bottom:1px solid #292929;text-align:center}
+th{color:#b7ff00;font-size:12px}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#101010;border-top:1px solid #292929;display:flex;justify-content:space-around;padding:9px 3px;z-index:10}
+.nav button{background:transparent;color:#aaa;margin:0;padding:8px;font-size:12px}
+.nav button.active{color:#b7ff00}
+.hide{display:none}
+.badge{display:inline-block;background:#b7ff00;color:#000;padding:5px 9px;border-radius:20px;font-size:12px;font-weight:bold}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
 </style>
 </head>
-<body>
-<div id="root"></div>
-<script>
-const KEY="asfit_v3";
-let db=JSON.parse(localStorage.getItem(KEY)||"null")||{
-user:{name:"Amit Singh",role:"Trainer"},
-clients:[
-{id:"c1",name:"Rahul Sharma",goal:"Lean Muscle Gain",weight:76.8,height:170,age:28,joined:"2025-01-10",training:"4–5 per week",diet:"Non-Vegetarian",notes:"No injuries"},
-{id:"c2",name:"Priya Mehta",goal:"Fat Loss",weight:64.2,height:165,age:31,joined:"2026-02-14",training:"4 per week",diet:"Vegetarian",notes:""},
-{id:"c3",name:"Ankit",goal:"Muscle Gain",weight:70,height:170,age:29,joined:"2026-05-20",training:"4 per week",diet:"Non-Vegetarian",notes:""}],
-exercises:["Bench Press","Squat","Lat Pulldown","Shoulder Press","Biceps Curl","Triceps Pushdown"],
-workouts:[
-{id:"w1",clientId:"c1",date:"2026-09-05",name:"Chest + Triceps",hr:142,rpe:8,rest:90,duration:48,note:"Good form. Increase weight next week.",items:[{exercise:"Bench Press",sets:[{weight:70,reps:8,rpe:8},{weight:72.5,reps:8,rpe:8},{weight:72.5,reps:9,rpe:9}]}]},
-{id:"w2",clientId:"c1",date:"2026-08-29",name:"Chest + Triceps",hr:138,rpe:8,rest:90,duration:50,note:"Solid session.",items:[{exercise:"Bench Press",sets:[{weight:70,reps:8,rpe:8},{weight:70,reps:8,rpe:8},{weight:70,reps:8,rpe:8}]}]}],
-metrics:[],nutrition:[]
-};
-let page="home",selectedClient="c1",selectedExercise="Bench Press",range="all";
-let draft={clientId:"c1",name:"Chest + Triceps",date:new Date().toISOString().slice(0,10),hr:"",rpe:"",rest:"90",duration:"60",note:"",items:[]};
 
-const save=()=>localStorage.setItem(KEY,JSON.stringify(db));
-const c=()=>db.clients.find(x=>x.id===selectedClient);
-const ws=id=>db.workouts.filter(x=>x.clientId===id).sort((a,b)=>b.date.localeCompare(a.date));
-const bmi=x=>x.height&&x.weight?(x.weight/((x.height/100)**2)).toFixed(1):"—";
-const ini=n=>n.split(" ").map(x=>x[0]).slice(0,2).join("").toUpperCase();
-const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
-function go(p){page=p;render();scrollTo(0,0)}
-function best(id,e){let a=[];ws(id).forEach(w=>w.items.forEach(i=>{if(i.exercise===e)i.sets.forEach(s=>a.push(+s.weight||0))}));return a.length?Math.max(...a):null}
-function volume(id,e){let n=0;ws(id).forEach(w=>w.items.forEach(i=>{if(i.exercise===e)i.sets.forEach(s=>n+=(+s.weight||0)*(+s.reps||0))}));return n}
-function sets(id,e){let n=0;ws(id).forEach(w=>w.items.forEach(i=>{if(i.exercise===e)n+=i.sets.length}));return n}
-function toast(t){let x=document.createElement("div");x.textContent=t;x.style="position:fixed;bottom:85px;left:50%;transform:translateX(-50%);background:#c8ff35;color:#071006;padding:11px 16px;border-radius:10px;font-weight:bold;z-index:99";document.body.appendChild(x);setTimeout(()=>x.remove(),1600)}
-function header(){return `<header class="top"><div class="logo">AS</div><div><div class="brand">AS FITNESS TRACKER</div><div class="sub">Trainer • Amit Singh</div></div><div class="spacer"></div><button class="btn" onclick="alert('Secure login will be connected with Supabase.')">Logout</button></header>`}
-function nav(){return `<nav class="nav"><div class="navin">${[["home","⌂","Home"],["clients","♙","Clients"],["workout","＋","Workout"],["history","▤","History"],["progress","⌁","Progress"]].map(x=>`<button class="${page===x[0]?"active":""}" onclick="go('${x[0]}')"><i>${x[1]}</i>${x[2]}</button>`).join("")}</div></nav>`}
-function shell(x){root.innerHTML=`<div class="app">${header()}<main class="wrap">${x}</main></div>${nav()}`}
-function field(l,id,t,v){return `<div class="field"><label>${l}</label><input id="${id}" type="${t}" value="${esc(v)}"></div>`}
-function select(l,id,arr,v){return `<div class="field"><label>${l}</label><select id="${id}">${arr.map(x=>`<option value="${x[0]}" ${x[0]===v?"selected":""}>${esc(x[1])}</option>`).join("")}</select></div>`}
+<body>
+
+<header>
+  <div>
+    <div class="logo"><span class="lime">AS</span> FITNESS TRACKER</div>
+    <small style="color:#888">Trainer • Amit Singh</small>
+  </div>
+  <span class="badge">LIVE</span>
+</header>
+
+<main id="app"></main>
+
+<nav class="nav">
+  <button id="navHome" onclick="showPage('home')">⌂<br>Home</button>
+  <button id="navClients" onclick="showPage('clients')">👥<br>Clients</button>
+  <button id="navWorkout" onclick="showPage('workout')">🏋<br>Workout</button>
+  <button id="navHistory" onclick="showPage('history')">☷<br>History</button>
+  <button id="navProgress" onclick="showPage('progress')">◒<br>Progress</button>
+</nav>
+
+<script>
+"use strict";
+
+const app = document.getElementById("app");
+
+const db = {
+  clients: [
+    {id:1,name:"Rahul Sharma",age:28,height:170,weight:76.8,goal:"Lean Muscle Gain",training:"4–5 days/week",diet:"Non-Vegetarian",notes:"No injuries"},
+    {id:2,name:"Priya Mehta",age:31,height:165,weight:62,goal:"Fat Loss",training:"4 days/week",diet:"Vegetarian",notes:""},
+    {id:3,name:"Ankit",age:29,height:172,weight:70,goal:"Muscle Building",training:"5 days/week",diet:"Non-Vegetarian",notes:""}
+  ],
+  exercises:["Bench Press","Squat","Lat Pulldown","Shoulder Press","Biceps Curl","Triceps Pushdown"],
+  workouts:[
+    {client:"Rahul Sharma",name:"Chest + Triceps",date:"2026-09-05",exercise:"Bench Press",sets:[[70,8,8],[72.5,8,8],[72.5,8,9],[75,6,9]],hr:142,rpe:9,rest:90,duration:60,notes:"Good form. Increase weight next week."},
+    {client:"Rahul Sharma",name:"Chest + Triceps",date:"2026-08-29",exercise:"Bench Press",sets:[[67.5,8,8],[70,8,8],[70,8,8]],hr:138,rpe:8,rest:90,duration:58,notes:""}
+  ]
+};
+
+let page="home";
+let selectedClient=1;
+
+function bmi(c){
+  return c.height && c.weight ? (c.weight/((c.height/100)**2)).toFixed(1) : "—";
+}
+
+function nav(){
+  ["Home","Clients","Workout","History","Progress"].forEach(x=>{
+    const el=document.getElementById("nav"+x);
+    if(el) el.classList.toggle("active",page===x.toLowerCase());
+  });
+}
+
+function showPage(p){
+  page=p;
+  nav();
+  if(p==="home") home();
+  if(p==="clients") clients();
+  if(p==="workout") workout();
+  if(p==="history") historyPage();
+  if(p==="progress") progress();
+}
 
 function home(){
-return `<h1 class="title">Dashboard</h1><div class="muted">Welcome back, Amit. Coach smarter with every session.</div>
-<div class="grid" style="margin-top:15px"><div class="card stat"><span>Total Clients</span><b>${db.clients.length}</b></div><div class="card stat"><span>Sessions Logged</span><b>${db.workouts.length}</b></div><div class="card stat"><span>Exercises</span><b>${db.exercises.length}</b></div><div class="card stat"><span>Active Tracking</span><b class="lime">100%</b></div></div>
-<div class="actions"><button class="btn primary" onclick="go('workout')">＋ Log Workout</button><button class="btn" onclick="addClient()">＋ Add Client</button></div>
-<div class="card"><h2>Recent Sessions</h2>${db.workouts.slice().sort((a,b)=>b.date.localeCompare(a.date)).slice(0,5).map(w=>`<div class="meal"><span><b>${esc(db.clients.find(x=>x.id===w.clientId)?.name||"Client")}</b><br><span class="small muted">${esc(w.name)} • ${w.date}</span></span><span>${w.items.reduce((n,i)=>n+i.sets.length,0)} sets</span></div>`).join("")||`<div class="muted">No sessions yet.</div>`}</div>`}
+app.innerHTML=`
+<h1>Dashboard</h1>
+<p>Good to see you, Amit.</p>
+
+<div class="grid">
+<div class="stat"><b>${db.clients.length}</b>Total Clients</div>
+<div class="stat"><b>${db.workouts.length}</b>Sessions Logged</div>
+<div class="stat"><b>${db.exercises.length}</b>Exercises</div>
+<div class="stat"><b>100%</b>Active Tracking</div>
+</div>
+
+<div class="card">
+<h2>Quick Actions</h2>
+<button onclick="showPage('workout')">＋ Log Workout</button>
+<button onclick="addClient()" class="dark">＋ Add Client</button>
+</div>
+
+<div class="card">
+<h2>Recent Session</h2>
+${db.workouts.slice(0,2).map(w=>`
+<div class="row">
+<div><b>${w.client}</b><br><small style="color:#888">${w.exercise} • ${w.date}</small></div>
+<div class="lime">${w.sets.length} sets</div>
+</div><hr style="border-color:#222">
+`).join("")}
+</div>`;
+}
 
 function clients(){
-return `<div class="row between"><div><h1 class="title">Clients</h1><div class="muted">Client profiles and progress.</div></div><button class="btn primary" onclick="addClient()">＋ Add Client</button></div>
-${db.clients.map(x=>`<div class="card" style="margin-top:10px"><div class="row between"><div class="client"><div class="avatar">${ini(x.name)}</div><div><b>${esc(x.name)}</b><div class="small muted">${esc(x.goal)}</div></div></div><button class="btn" onclick="selectedClient='${x.id}';go('profile')">Open</button></div><div class="small muted" style="margin-top:10px">${x.weight} kg • ${x.height} cm • BMI ${bmi(x)} • ${ws(x.id).length} sessions</div></div>`).join("")}`}
-function profile(){
-let x=c();return `<div class="row between"><div><h1 class="title">${esc(x.name)}</h1><div class="muted">Client since ${new Date(x.joined).toLocaleDateString("en-IN",{month:"short",year:"numeric"})}</div></div><button class="btn" onclick="go('clients')">← Clients</button></div>
-<div class="tabs"><button class="btn tab active">Overview</button><button class="btn tab">Measurements</button><button class="btn tab">Photos</button><button class="btn tab">Notes</button></div>
-<div class="grid2"><div class="card"><h2>Client Profile</h2><div class="grid2">${field("Age","age","number",x.age)}${field("Height (cm)","height","number",x.height)}${field("Weight (kg)","weight","number",x.weight)}<div class="field"><label>BMI</label><div class="card">${bmi(x)}</div></div>${field("Goal","goal","text",x.goal)}${field("Training Days","training","text",x.training)}${field("Diet Type","diet","text",x.diet)}</div><button class="btn primary full" onclick="saveProfile()">Save Profile</button></div>
-<div class="card"><h2>Client Notes</h2><textarea id="notes" rows="10">${esc(x.notes)}</textarea><div class="actions"><button class="btn primary" onclick="saveNote()">Save Note</button></div></div></div>`}
-function saveProfile(){let x=c();x.age=+age.value;x.height=+height.value;x.weight=+weight.value;x.goal=goal.value;x.training=training.value;x.diet=diet.value;save();toast("Profile saved");render()}
-function saveNote(){c().notes=notes.value;save();toast("Note saved")}
+app.innerHTML=`
+<h1>Clients</h1>
+<button onclick="addClient()">＋ Add Client</button>
+${db.clients.map(c=>`
+<div class="card" onclick="profile(${c.id})">
+<div class="row">
+<div><b>${c.name}</b><br><small style="color:#888">${c.goal}</small></div>
+<div class="lime">BMI ${bmi(c)}</div>
+</div>
+</div>`).join("")}`;
+}
+
+function profile(id){
+selectedClient=id;
+const c=db.clients.find(x=>x.id===id);
+app.innerHTML=`
+<button class="dark" onclick="showPage('clients')">← Back</button>
+<h1>${c.name}</h1>
+<p>Client Profile</p>
+
+<div class="grid">
+<div class="stat"><small>Age</small><b>${c.age}</b></div>
+<div class="stat"><small>Height</small><b>${c.height} cm</b></div>
+<div class="stat"><small>Weight</small><b>${c.weight} kg</b></div>
+<div class="stat"><small>BMI</small><b>${bmi(c)}</b></div>
+</div>
+
+<div class="card">
+<p>Goal</p><b>${c.goal}</b>
+<p>Training Days</p><b>${c.training}</b>
+<p>Diet Type</p><b>${c.diet}</b>
+<p>Notes</p><b>${c.notes || "—"}</b>
+</div>
+
+<button onclick="showPage('workout')">＋ Log Workout</button>`;
+}
 
 function workout(){
-if(!draft.items.length)draft.items=[{exercise:"Bench Press",sets:[{weight:"",reps:"",rpe:""}]}];
-return `<h1 class="title">Log Workout</h1><div class="muted">Record every exercise, set, weight, reps and RPE.</div>
-<div class="grid2" style="margin-top:14px"><div class="card">${select("Client","wc",db.clients.map(x=>[x.id,x.name]),draft.clientId)}${field("Workout Name","wn","text",draft.name)}${field("Date","wd","date",draft.date)}</div>
-<div class="card"><h3>Previous Workout</h3><div class="muted">${previous()}</div><div class="small muted" style="margin-top:8px">Use previous numbers to compare today's performance.</div></div></div>
-${draft.items.map((it,i)=>`
-<div class="card exercise"><div class="exerciseHead"><input value="${esc(it.exercise)}" onchange="draft.items[${i}].exercise=this.value"><button class="btn danger" onclick="removeEx(${i})">Remove</button></div>
-<table style="margin-top:10px"><thead><tr><th>Set</th><th>Weight kg</th><th>Reps</th><th>RPE</th><th></th></tr></thead><tbody>
-${it.sets.map((s,j)=>`<tr><td>${j+1}</td><td><input type="number" step=".5" value="${s.weight}" onchange="sv(${i},${j},'weight',this.value)"></td><td><input type="number" value="${s.reps}" onchange="sv(${i},${j},'reps',this.value)"></td><td><input type="number" step=".5" value="${s.rpe}" onchange="sv(${i},${j},'rpe',this.value)"></td><td><button class="btn" onclick="removeSet(${i},${j})">×</button></td></tr>`).join("")}
-</tbody></table><div class="actions"><button class="btn" onclick="addSet(${i})">＋ Add Set</button></div></div>`).join("")}
-<div class="actions"><button class="btn" onclick="addEx()">＋ Add Exercise</button></div>
-<div class="grid2"><div class="card">${field("Heart Rate (bpm)","hr","number",draft.hr)}${field("Overall RPE","orpe","number",draft.rpe)}${field("Rest Time (sec)","rest","number",draft.rest)}</div><div class="card">${field("Duration (min)","dur","number",draft.duration)}<div class="field"><label>Notes</label><textarea id="note" rows="4">${esc(draft.note)}</textarea></div></div></div>
-<button class="btn primary full" onclick="complete()">✓ Complete Workout</button>`}
-function previous(){let e=draft.items[0]?.exercise||"Bench Press",w=ws(draft.clientId).find(w=>w.items.some(i=>i.exercise===e));if(!w)return"No previous record";let i=w.items.find(i=>i.exercise===e);return w.date+" — "+i.sets.map(s=>`${s.weight} kg × ${s.reps}`).join(" • ")}
-function sv(i,j,k,v){draft.items[i].sets[j][k]=v}
-function addSet(i){draft.items[i].sets.push({weight:"",reps:"",rpe:""});render()}
-function removeSet(i,j){if(draft.items[i].sets.length>1)draft.items[i].sets.splice(j,1);render()}
-function addEx(){draft.items.push({exercise:"New Exercise",sets:[{weight:"",reps:"",rpe:""}]});render()}
-function removeEx(i){if(draft.items.length>1)draft.items.splice(i,1);render()}
-‎function complete(){
-‎draft.clientId=wc.value;draft.name=wn.value;draft.date=wd.value;draft.hr=hr.value;draft.rpe=orpe.value;draft.rest=rest.value;draft.duration=dur.value;draft.note=note.value;
-‎if(!draft.items.some(i=>i.exercise&&i.sets.some(s=>+s.weight>0&&+s.reps>0))){toast("Enter weight and reps");return}
-‎db.workouts.push({id:"w"+Date.now(),clientId:draft.clientId,date:draft.date,name:draft.name,hr:+draft.hr,rpe:+draft.rpe,rest:+draft.rest,duration:+draft.duration,note:draft.note,items:draft.items.map(i=>({exercise:i.exercise,sets:i.sets.map(s=>({weight:+s.weight,reps:+s.reps,rpe:+s.rpe}))}))});
-‎save();toast("Workout saved");draft={clientId:draft.clientId,name:"Chest + Triceps",date:new Date().toISOString().slice(0,10),hr:"",rpe:"",rest:"90",duration:"60",note:"",items:[]};setTimeout(()=>go("history"),500)}
-‎function history(){
-‎let x=c(),e=selectedExercise,rows=[];ws(x.id).forEach(w=>w.items.forEach(i=>{if(i.exercise===e)rows.push({date:w.date,sets:i.sets})}));
-‎return `<div class="row between"><div><h1 class="title">Exercise History</h1><div class="muted">${esc(x.name)} • ${esc(e)}</div></div><button class="btn" onclick="go('clients')">Change Client</button></div>
-‎<div class="tabs">${["1m","3m","1y","all"].map(r=>`<button class="btn tab ${range===r?"active":""}" onclick="range='${r}';render()">${r==="1m"?"1M":r==="3m"?"3M":r==="1y"?"1Y":"All"}</button>`).join("")}</div>
-‎<div class="card">${select("Exercise","he",db.exercises.map(e=>[e,e]),e)}<div class="grid"><div class="stat"><span>Best Weight</span><b>${best(x.id,e)??"—"} kg</b></div><div class="stat"><span>Total Volume</span><b>${volume(x.id,e).toLocaleString()} kg</b></div><div class="stat"><span>Total Sets</span><b>${sets(x.id,e)}</b></div><div class="stat"><span>Sessions</span><b>${rows.length}</b></div></div></div>
-‎<div class="card" style="margin-top:12px"><table><thead><tr><th>Date</th><th>Weight</th><th>Reps</th><th>Sets</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${r.date}</td><td>${Math.max(...r.sets.map(s=>s.weight))} kg</td><td>${r.sets.map(s=>s.reps).join(" / ")}</td><td>${r.sets.length}</td></tr>`).join("")||"<tr><td colspan=4>No history</td></tr>"}</tbody></table></div>`}
-‎function progress(){
-‎let x=c(),a=[];ws(x.id).forEach(w=>w.items.forEach(i=>{if(i.exercise===selectedExercise)i.sets.forEach(s=>a.push([w.date,+s.weight||0]))}));a.sort((p,q)=>p[0].localeCompare(q[0]));let v=a.map(z=>z[1]),cur=v.at(-1),prev=v.at(-2),bestv=v.length?Math.max(...v):null,first=v[0],pct=first?(((cur-first)/first)*100).toFixed(1):"—";setTimeout(()=>draw(a),30);
-‎return `<h1 class="title">Progress</h1><div class="muted">${esc(x.name)}</div><div class="tabs"><button class="btn tab active">Strength</button><button class="btn tab" onclick="alert('Weight progress will use body measurements.')">Weight</button><button class="btn tab" onclick="alert('Add body-fat measurements in the client profile.')">Body Fat</button></div>
-‎<div class="card">${select("Exercise","pe",db.exercises.map(e=>[e,e]),selectedExercise)}<canvas id="chart" width="900" height="240"></canvas></div>
-‎<div class="grid" style="margin-top:12px"><div class="card stat"><span>Current</span><b>${cur??"—"} kg</b></div><div class="card stat"><span>Previous</span><b>${prev??"—"} kg</b></div><div class="card stat"><span>All-Time Best</span><b>${bestv??"—"} kg</b></div><div class="card stat"><span>Change Since Start</span><b>${pct}%</b></div></div>`}
-‎function draw(a){let z=document.getElementById("chart");if(!z||a.length<2)return;let g=z.getContext("2d"),w=z.width,h=z.height,v=a.map(x=>x[1]),mn=Math.min(...v),mx=Math.max(...v);if(mn===mx){mn--;mx++}g.clearRect(0,0,w,h);g.strokeStyle="#27312c";for(let i=1;i<5;i++){g.beginPath();g.moveTo(40,i*h/5);g.lineTo(w-20,i*h/5);g.stroke()}g.strokeStyle="#c8ff35";g.lineWidth=3;g.beginPath();a.forEach((p,i)=>{let X=40+i*(w-70)/(a.length-1),Y=h-30-(p[1]-mn)*(h-60)/(mx-mn);i?g.lineTo(X,Y):g.moveTo(X,Y)});g.stroke()}
-‎function nutrition(){let x=c();return `<h1 class="title">Nutrition & Check-In</h1><div class="muted">${esc(x.name)}</div><div class="grid" style="margin-top:14px"><div class="card stat"><span>Calories</span><b>1850 / 2200</b></div><div class="card stat"><span>Protein</span><b>120 / 150 g</b></div><div class="card stat"><span>Water</span><b>2.5 / 3 L</b></div><div class="card stat"><span>Steps</span><b>8,400</b></div></div><div class="card" style="margin-top:12px"><h2>Meals</h2><div class="meal"><span><b>Breakfast</b><br><span class="small muted">3 eggs + 2 chapati</span></span><span>450 kcal</span></div><div class="meal"><span><b>Lunch</b><br><span class="small muted">Chicken + rice + salad</span></span><span>550 kcal</span></div><div class="meal"><span><b>Evening</b><br><span class="small muted">Dahi + banana</span></span><span>300 kcal</span></div><div class="meal"><span><b>Dinner</b><br><span class="small muted">Dal + 2 bhakari</span></span><span>550 kcal</span></div></div>`}
-‎function addClient(){let n=prompt("Client name");if(!n)return;let id="c"+Date.now();db.clients.push({id,name:n,goal:"Muscle Gain",weight:0,height:0,age:0,joined:new Date().toISOString().slice(0,10),training:"4 per week",diet:"",notes:""});save();selectedClient=id;go("profile")}
-‎function render(){if(page==="home")shell(home());else if(page==="clients")shell(clients());else if(page==="profile")shell(profile());else if(page==="workout")shell(workout());else if(page==="history")shell(history());else if(page==="progress")shell(progress());else if(page==="nutrition")shell(nutrition())}
-‎document.addEventListener("change",e=>{if(e.target.id==="he"){selectedExercise=e.target.value;render()}if(e.target.id==="pe"){selectedExercise=e.target.value;render()}});
-‎render();
-‎</script>
-‎</body>
-‎</html>
+const c=db.clients.find(x=>x.id===selectedClient);
+app.innerHTML=`
+<h1>Log Workout</h1>
+
+<div class="card">
+<label>Client</label>
+<select id="workClient">
+${db.clients.map(x=>`<option value="${x.id}" ${x.id===selectedClient?"selected":""}>${x.name}</option>`).join("")}
+</select>
+
+<label>Workout Name</label>
+<input id="workName" value="Chest + Triceps">
+
+<label>Date</label>
+<input id="workDate" type="date" value="${new Date().toISOString().slice(0,10)}">
+
+<label>Exercise</label>
+<select id="workExercise">
+${db.exercises.map(x=>`<option>${x}</option>`).join("")}
+</select>
+</div>
+
+<div class="card">
+<div class="row"><h2 style="margin:0">Sets</h2><button onclick="addSet()">＋ Add Set</button></div>
+<div style="overflow-x:auto">
+<table>
+<thead><tr><th>Set</th><th>Weight kg</th><th>Reps</th><th>RPE</th></tr></thead>
+<tbody id="setsBody">
+<tr><td>1</td><td><input class="sw" type="number" value="70"></td><td><input class="sr" type="number" value="8"></td><td><input class="se" type="number" value="8"></td></tr>
+<tr><td>2</td><td><input class="sw" type="number" value="72.5"></td><td><input class="sr" type="number" value="8"></td><td><input class="se" type="number" value="8"></td></tr>
+<tr><td>3</td><td><input class="sw" type="number" value="72.5"></td><td><input class="sr" type="number" value="8"></td><td><input class="se" type="number" value="9"></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div class="card">
+<label>Heart Rate (bpm)</label>
+<input id="workHR" type="number" value="142">
+
+<label>Overall RPE</label>
+<input id="workRPE" type="number" value="9">
+
+<label>Rest Time (sec)</label>
+<input id="workRest" type="number" value="90">
+
+<label>Duration (min)</label>
+<input id="workDuration" type="number" value="60">
+
+<label>Notes</label>
+<textarea id="workNotes">Good form. Increase weight next week.</textarea>
+</div>
+
+<div class="card">
+<h2>Previous Workout</h2>
+${previousWorkout(c.name)}
+</div>
+
+<button onclick="completeWorkout()">✓ Complete Workout</button>`;
+}
+
+function addSet(){
+const body=document.getElementById("setsBody");
+const n=body.rows.length+1;
+body.insertAdjacentHTML("beforeend",
+`<tr><td>${n}</td><td><input class="sw" type="number"></td><td><input class="sr" type="number"></td><td><input class="se" type="number"></td></tr>`);
+}
+
+function previousWorkout(name){
+const w=db.workouts.find(x=>x.client===name);
+if(!w)return "No previous workout";
+return `${w.exercise}: ${w.sets[0][0]} kg × ${w.sets[0][1]} × ${w.sets.length} sets`;
+}
+
+function completeWorkout(){
+const clientId=Number(document.getElementById("workClient").value);
+const c=db.clients.find(x=>x.id===clientId);
+const sets=[...document.querySelectorAll("#setsBody tr")].map(r=>{
+const inputs=r.querySelectorAll("input");
+return [Number(inputs[0].value)||0,Number(inputs[1].value)||0,Number(inputs[2].value)||0];
+});
+
+db.workouts.unshift({
+client:c.name,
+name:document.getElementById("workName").value,
+date:document.getElementById("workDate").value,
+exercise:document.getElementById("workExercise").value,
+sets:sets,
+hr:Number(document.getElementById("workHR").value)||0,
+rpe:Number(document.getElementById("workRPE").value)||0,
+rest:Number(document.getElementById("workRest").value)||0,
+duration:Number(document.getElementById("workDuration").value)||0,
+notes:document.getElementById("workNotes").value
+});
+
+alert("Workout completed and saved.");
+showPage("history");
+}
+
+function historyPage(){
+app.innerHTML=`
+<h1>Exercise History</h1>
+<div class="card">
+<div class="row"><b>Bench Press</b><span class="badge">All Time</span></div>
+<p>Best Weight: <b class="lime">90 kg</b></p>
+<p>Total Volume: <b>16,240 kg</b></p>
+<p>Total Sets: <b>124</b></p>
+</div>
+
+<div class="card">
+<table>
+<thead><tr><th>Date</th><th>Weight</th><th>Reps</th><th>Sets</th></tr></thead>
+<tbody>
+<tr><td>05 Sep 2026</td><td>72.5</td><td>8</td><td>3</td></tr>
+<tr><td>29 Aug 2026</td><td>70</td><td>8</td><td>3</td></tr>
+<tr><td>12 Aug 2026</td><td>67.5</td><td>9</td><td>3</td></tr>
+<tr><td>03 Jul 2026</td><td>65</td><td>8</td><td>3</td></tr>
+<tr><td>20 May 2026</td><td>60</td><td>8</td><td>3</td></tr>
+<tr><td>15 Jan 2026</td><td>55</td><td>10</td><td>3</td></tr>
+</tbody>
+</table>
+</div>`;
+}
+
+function progress(){
+app.innerHTML=`
+<h1>Progress</h1>
+<div class="grid">
+<div class="stat"><small>Current</small><b>72.5 kg</b></div>
+<div class="stat"><small>Previous Best</small><b>70 kg</b></div>
+<div class="stat"><small>All-Time Best</small><b>90 kg</b></div>
+<div class="stat"><small>Since Jan</small><b>+31.8%</b></div>
+</div>
+
+<div class="card">
+<h2>Bench Press — Strength</h2>
+<p style="color:#b7ff00">Jan → Sep 2026</p>
+<div style="height:180px;display:flex;align-items:end;gap:8px;border-bottom:2px solid #b7ff00">
+${[55,60,65,67.5,70,72.5].map(v=>`<div style="flex:1;background:#b7ff00;height:${v*2}px;max-height:160px;border-radius:5px 5px 0 0"></div>`).join("")}
+</div>
+</div>
+
+<div class="card">
+<h2>Body Weight</h2>
+<p>Track weight, body fat and measurements over time.</p>
+<button class="dark">Weight</button>
+<button class="dark">Body Fat</button>
+</div>`;
+}
+
+function addClient(){
+const name=prompt("Enter client name");
+if(!name)return;
+db.clients.push({
+id:Date.now(),name:name,age:0,height:170,weight:0,
+goal:"Not set",training:"Not set",diet:"Not set",notes:""
+});
+alert("Client added.");
+showPage("clients");
+}
+
+showPage("home");
+</script>
+</body>
+</html>
