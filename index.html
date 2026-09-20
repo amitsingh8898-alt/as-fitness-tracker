@@ -314,10 +314,34 @@ ${db.clients.map(x=>`<option value="${x.id}" ${x.id===selectedClient?"selected":
 
 <label>Date</label>
 <input id="workDate" type="date" value="${new Date().toISOString().slice(0,10)}">
+ <label>Muscle Group</label>
+
+<div class="row">
+<button class="dark" onclick="filterMuscle('All')">All</button>
+<button class="dark" onclick="filterMuscle('Chest')">Chest</button>
+<button class="dark" onclick="filterMuscle('Back')">Back</button>
+<button class="dark" onclick="filterMuscle('Shoulders')">Shoulders</button>
+<button class="dark" onclick="filterMuscle('Biceps')">Biceps</button>
+<button class="dark" onclick="filterMuscle('Triceps')">Triceps</button>
+<button class="dark" onclick="filterMuscle('Legs')">Legs</button>
+<button class="dark" onclick="filterMuscle('Glutes')">Glutes</button>
+<button class="dark" onclick="filterMuscle('Core')">Core</button>
+</div>
+
+<label>Training Type</label>
+
+<div class="row">
+<button class="dark" onclick="filterType('All')">All</button>
+<button class="dark" onclick="filterType('Weight Training')">Weight Training</button>
+<button class="dark" onclick="filterType('Bodyweight')">Bodyweight</button>
+<button class="dark" onclick="filterType('Band')">Resistance Band</button>
+<button class="dark" onclick="filterType('Machine')">Machine</button>
+<button class="dark" onclick="filterType('Mobility')">Mobility</button>
+</div>
+
 <label>Exercise</label>
-<select id="workExercise">
-${exerciseCatalog.map(x=>`<option value="${x[0]}">${x[0]} — ${x[1]} (${x[2]})</option>`).join("")}
-</select>
+
+<select id="workExercise"></select>
 
 <button class="dark" onclick="addCustomExercise()">＋ Add Custom Exercise</button>
 
@@ -525,7 +549,60 @@ notes:document.getElementById("newNotes").value
 alert("Client added successfully.");
 showPage("clients");
 }
+let selectedMuscle = "All";
+let selectedType = "All";
 
+function exerciseType(equipment){
+  if(equipment === "Bodyweight") return "Bodyweight";
+  if(equipment === "Band") return "Band";
+  if(equipment === "Machine") return "Machine";
+  if(equipment === "Mobility") return "Mobility";
+  return "Weight Training";
+}
+
+function filterMuscle(muscle){
+  selectedMuscle = muscle;
+  updateExerciseList();
+}
+
+function filterType(type){
+  selectedType = type;
+  updateExerciseList();
+}
+
+function updateExerciseList(){
+  const select = document.getElementById("workExercise");
+  if(!select) return;
+
+  const filtered = exerciseCatalog.filter(x=>{
+    const name = x[0];
+    const category = x[1];
+    const equipment = x[2];
+
+    let muscleMatch =
+      selectedMuscle === "All" ||
+      category === selectedMuscle ||
+      (selectedMuscle === "Legs" &&
+        ["Quads","Hamstrings","Calves","Legs"].includes(category));
+
+    const typeMatch =
+      selectedType === "All" ||
+      exerciseType(equipment) === selectedType;
+
+    return muscleMatch && typeMatch;
+  });
+
+  select.innerHTML = filtered.map(x =>
+    `<option value="${x[0]}">${x[0]} — ${x[1]} (${x[2]})</option>`
+  ).join("");
+
+  if(!filtered.length){
+    select.innerHTML =
+      `<option>No exercises found</option>`;
+  }
+}
+
+updateExerciseList();
 function addCustomExercise(){
   const name = prompt("Enter your exercise name:");
   if(!name) return;
