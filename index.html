@@ -549,19 +549,34 @@ notes:document.getElementById("newNotes").value
 alert("Client added successfully.");
 showPage("clients");
 }
-let selectedMuscle = "All";
+let selectedMuscle = [];
 let selectedType = "All";
 
 function exerciseType(equipment){
   if(equipment === "Bodyweight") return "Bodyweight";
-  if(equipment === "Band") return "Band";
+  if(equipment === "Band") return "Resistance Band";
   if(equipment === "Machine") return "Machine";
   if(equipment === "Mobility") return "Mobility";
   return "Weight Training";
 }
 
 function filterMuscle(muscle){
-  selectedMuscle = muscle;
+
+  // All = clear all selected muscles
+  if(muscle === "All"){
+    selectedMuscle = [];
+  }
+
+  // Toggle muscle group on/off
+  else{
+    if(selectedMuscle.includes(muscle)){
+      selectedMuscle = selectedMuscle.filter(x => x !== muscle);
+    }else{
+      selectedMuscle.push(muscle);
+    }
+  }
+
+  updateWorkoutName();
   updateExerciseList();
 }
 
@@ -570,20 +585,51 @@ function filterType(type){
   updateExerciseList();
 }
 
+function updateWorkoutName(){
+
+  const input = document.getElementById("workName");
+
+  if(!input) return;
+
+  if(selectedMuscle.length === 0){
+    input.value = "Full Body";
+  }else{
+    input.value = selectedMuscle.join(" + ");
+  }
+}
+
 function updateExerciseList(){
+
   const select = document.getElementById("workExercise");
+
   if(!select) return;
 
-  const filtered = exerciseCatalog.filter(x=>{
+  const filtered = exerciseCatalog.filter(x => {
+
     const name = x[0];
     const category = x[1];
     const equipment = x[2];
 
-    let muscleMatch =
-      selectedMuscle === "All" ||
-      category === selectedMuscle ||
-      (selectedMuscle === "Legs" &&
-        ["Quads","Hamstrings","Calves","Legs"].includes(category));
+    let muscleMatch = true;
+
+    if(selectedMuscle.length > 0){
+
+      muscleMatch = selectedMuscle.some(muscle => {
+
+        if(category === muscle) return true;
+
+        if(muscle === "Legs"){
+          return [
+            "Quads",
+            "Hamstrings",
+            "Calves",
+            "Legs"
+          ].includes(category);
+        }
+
+        return false;
+      });
+    }
 
     const typeMatch =
       selectedType === "All" ||
@@ -602,6 +648,7 @@ function updateExerciseList(){
   }
 }
 
+updateWorkoutName();
 updateExerciseList();
 function addCustomExercise(){
   const name = prompt("Enter your exercise name:");
